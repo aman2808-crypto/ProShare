@@ -441,7 +441,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="projectPrice">Price ($)</label>
+                        <label for="projectPrice">Price <i class="fa-solid fa-indian-rupee-sign"></i></label>
                         <input type="number" id="projectPrice" class="form-control" min="1" required>
                     </div>
                 </div>
