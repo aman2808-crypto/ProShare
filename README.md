@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProShare - College Project Marketplace</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .search-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(31, 38, 135, 0.5);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .project-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .project-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .project-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: #667eea;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .no-projects {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-projects h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <nav class="nav">
+                <div class="logo">ProShare</div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="showLoginModal()">Login</button>
+                    <button class="btn btn-primary" onclick="showSellModal()">Sell Project</button>
+                </div>
+            </nav>
+        </header>
+
+        <section class="search-section">
+            <form class="search-form" onsubmit="searchProjects(event)">
+                <div class="form-group">
+                    <label for="searchQuery">Search Projects</label>
+                    <input type="text" id="searchQuery" class="form-control" placeholder="Enter keywords...">
+                </div>
+                <div class="form-group">
+                    <label for="subjectFilter">Subject</label>
+                    <select id="subjectFilter" class="form-control">
+                        <option value="">All Subjects</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Business">Business</option>
+                        <option value="Literature">Literature</option>
+                        <option value="History">History</option>
+                        <option value="Psychology">Psychology</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="priceRange">Max Price</label>
+                    <input type="number" id="priceRange" class="form-control" placeholder="$0" min="0">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </section>
+
+        <main id="projectsContainer">
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Projects will be dynamically loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login to ProShare</h2>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 15px;">
+                Don't have an account? <a href="#" onclick="showSignupModal()" style="color: #667eea;">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Sign Up for ProShare</h2>
+            <form onsubmit="signup(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="signupFirstName">First Name</label>
+                        <input type="text" id="signupFirstName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupLastName">Last Name</label>
+                        <input type="text" id="signupLastName" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupUniversity">University</label>
+                    <input type="text" id="signupUniversity" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sell Project Modal -->
+    <div id="sellModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('sellModal')">&times;</span>
+            <h2>Sell Your Project</h2>
+            <form onsubmit="sellProject(event)">
+                <div class="form-group">
+                    <label for="projectTitle">Project Title</label>
+                    <input type="text" id="projectTitle" class="form-control" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectSubject">Subject</label>
+                        <select id="projectSubject" class="form-control" required>
+                            <option value="">Select Subject</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Business">Business</option>
+                            <option value="Literature">Literature</option>
+                            <option value="History">History</option>
+                            <option value="Psychology">Psychology</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectPrice">Price ($)</label>
+                        <input type="number" id="projectPrice" class="form-control" min="1" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="projectType">Project Type</label>
+                        <select id="projectType" class="form-control" required>
+                            <option value="">Select Type</option>
+                            <option value="Research Paper">Research Paper</option>
+                            <option value="Lab Report">Lab Report</option>
+                            <option value="Programming Project">Programming Project</option>
+                            <option value="Presentation">Presentation</option>
+                            <option value="Case Study">Case Study</option>
+                            <option value="Essay">Essay</option>
+                            <option value="Thesis">Thesis</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectGrade">Grade Received</label>
+                        <select id="projectGrade" class="form-control">
+                            <option value="">Select Grade</option>
+                            <option value="A+">A+</option>
+                            <option value="A">A</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B">B</option>
+                            <option value="B-">B-</option>
+                            <option value="C+">C+</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Description</label>
+                    <textarea id="projectDescription" class="form-control" rows="4" placeholder="Describe your project, what it covers, and any special features..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">List Project</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Application state
+        let currentUser = null;
+        let projects = [
+            {
+                id: 1,
+                title: "Machine Learning Stock Predictor",
+                subject: "Computer Science",
+                type: "Programming Project",
+                price: 45,
+                grade: "A+",
+                description: "A Python-based machine learning model that predicts stock prices using historical data and various algorithms including LSTM and Random Forest.",
+                seller: "John Smith",
+                university: "MIT",
+                sellerId: 1
+            },
+            {
+                id: 2,
+                title: "Organic Chemistry Lab Analysis",
+                subject: "Chemistry",
+                type: "Lab Report",
+                price: 25,
+                grade: "A",
+                description: "Comprehensive lab report analyzing organic compound synthesis reactions with detailed methodology and results interpretation.",
+                seller: "Sarah Johnson",
+                university: "Stanford",
+                sellerId: 2
+            },
+            {
+                id: 3,
+                title: "Renaissance Art History Essay",
+                subject: "History",
+                type: "Essay",
+                price: 20,
+                grade: "A-",
+                description: "An in-depth analysis of Renaissance art movements and their cultural impact, focusing on key artists like Leonardo da Vinci and Michelangelo.",
+                seller: "Mike Davis",
+                university: "Harvard",
+                sellerId: 3
+            },
+            {
+                id: 4,
+                title: "Business Strategy Case Study: Netflix",
+                subject: "Business",
+                type: "Case Study",
+                price: 35,
+                grade: "A",
+                description: "Strategic analysis of Netflix's business model transformation and competitive advantages in the streaming industry.",
+                seller: "Emily Chen",
+                university: "Wharton",
+                sellerId: 4
+            },
+            {
+                id: 5,
+                title: "Quantum Physics Research Paper",
+                subject: "Physics",
+                type: "Research Paper",
+                price: 50,
+                grade: "A+",
+                description: "Advanced research on quantum entanglement phenomena with mathematical proofs and experimental design proposals.",
+                seller: "Alex Rodriguez",
+                university: "Caltech",
+                sellerId: 5
+            }
+        ];
+
+        let filteredProjects = [...projects];
+
+        // Initialize the application
+        function init() {
+            renderProjects();
+        }
+
+        // Authentication functions
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function showSignupModal() {
+            closeModal('loginModal');
+            document.getElementById('signupModal').style.display = 'block';
+        }
+
+        function showSellModal() {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            document.getElementById('sellModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simulate login
+            currentUser = {
+                id: Date.now(),
+                email: email,
+                name: email.split('@')[0],
+            };
+            
+            updateNavBar();
+            closeModal('loginModal');
+            alert('Login successful!');
+        }
+
+        function signup(event) {
+            event.preventDefault();
+            const firstName = document.getElementById('signupFirstName').value;
+            const lastName = document.getElementById('signupLastName').value;
+            const email = document.getElementById('signupEmail').value;
+            const university = document.getElementById('signupUniversity').value;
+            
+            // Simulate signup
+            currentUser = {
+                id: Date.now(),
+                email: email,
+                name: `${firstName} ${lastName}`,
+                university: university
+            };
+            
+            updateNavBar();
+            closeModal('signupModal');
+            alert('Account created successfully!');
+        }
+
+        function logout() {
+            currentUser = null;
+            updateNavBar();
+        }
+
+        function updateNavBar() {
+            const navButtons = document.querySelector('.nav-buttons');
+            if (currentUser) {
+                navButtons.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">${currentUser.name.charAt(0).toUpperCase()}</div>
+                        <span>Welcome, ${currentUser.name}</span>
+                    </div>
+                    <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                    <button class="btn btn-primary" onclick="showSellModal()">Sell Project</button>
+                `;
+            } else {
+                navButtons.innerHTML = `
+                    <button class="btn btn-secondary" onclick="showLoginModal()">Login</button>
+                    <button class="btn btn-primary" onclick="showSellModal()">Sell Project</button>
+                `;
+            }
+        }
+
+        // Project functions
+        function sellProject(event) {
+            event.preventDefault();
+            
+            const newProject = {
+                id: Date.now(),
+                title: document.getElementById('projectTitle').value,
+                subject: document.getElementById('projectSubject').value,
+                type: document.getElementById('projectType').value,
+                price: parseInt(document.getElementById('projectPrice').value),
+                grade: document.getElementById('projectGrade').value,
+                description: document.getElementById('projectDescription').value,
+                seller: currentUser.name,
+                university: currentUser.university || 'University',
+                sellerId: currentUser.id
+            };
+            
+            projects.unshift(newProject);
+            filteredProjects = [...projects];
+            renderProjects();
+            closeModal('sellModal');
+            alert('Project listed successfully!');
+            
+            // Reset form
+            document.querySelector('#sellModal form').reset();
+        }
+
+        function searchProjects(event) {
+            event.preventDefault();
+            
+            const query = document.getElementById('searchQuery').value.toLowerCase();
+            const subject = document.getElementById('subjectFilter').value;
+            const maxPrice = document.getElementById('priceRange').value;
+            
+            filteredProjects = projects.filter(project => {
+                const matchesQuery = !query || 
+                    project.title.toLowerCase().includes(query) ||
+                    project.description.toLowerCase().includes(query) ||
+                    project.seller.toLowerCase().includes(query);
+                
+                const matchesSubject = !subject || project.subject === subject;
+                const matchesPrice = !maxPrice || project.price <= parseInt(maxPrice);
+                
+                return matchesQuery && matchesSubject && matchesPrice;
+            });
+            
+            renderProjects();
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('projectsGrid');
+            
+            if (filteredProjects.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-projects">
+                        <h3>No projects found</h3>
+                        <p>Try adjusting your search criteria or be the first to list a project!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredProjects.map(project => `
+                <div class="project-card">
+                    <div class="project-header">
+                        <div>
+                            <h3 class="project-title">${project.title}</h3>
+                            <div class="user-info">
+                                <div class="user-avatar">${project.seller.charAt(0).toUpperCase()}</div>
+                                <span>${project.seller} • ${project.university}</span>
+                            </div>
+                        </div>
+                        <div class="project-price">$${project.price}</div>
+                    </div>
+                    
+                    <div class="project-meta">
+                        <span class="meta-item">${project.subject}</span>
+                        <span class="meta-item">${project.type}</span>
+                        ${project.grade ? `<span class="meta-item">Grade: ${project.grade}</span>` : ''}
+                    </div>
+                    
+                    <p class="project-description">${project.description}</p>
+                    
+                    <div class="project-actions">
+                        <button class="btn btn-secondary" onclick="viewProject(${project.id})">View Details</button>
+                        <button class="btn btn-primary" onclick="buyProject(${project.id})">Buy Now</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewProject(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                alert(`Project Details:\n\nTitle: ${project.title}\nSubject: ${project.subject}\nType: ${project.type}\nPrice: $${project.price}\nGrade: ${project.grade || 'Not specified'}\nSeller: ${project.seller}\nUniversity: ${project.university}\n\nDescription:\n${project.description}`);
+            }
+        }
+
+        function buyProject(projectId) {
+            if (!currentUser) {
+                showLoginModal();
+                return;
+            }
+            
+            const project = projects.find(p => p.id === projectId);
+            if (project) {
+                if (project.sellerId === currentUser.id) {
+                    alert("You cannot buy your own project!");
+                    return;
+                }
+                
+                const confirm = window.confirm(`Are you sure you want to buy "${project.title}" for $${project.price}?`);
+                if (confirm) {
+                    alert(`Purchase successful! You now have access to "${project.title}". Check your email for download instructions.`);
+                }
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
